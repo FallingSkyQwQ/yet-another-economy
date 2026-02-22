@@ -1,0 +1,137 @@
+# YetAnotherEconomy 语言配置文件
+# Language configuration for YetAnotherEconomy
+# 支持的语言：zh_cn, en_us
+
+language-info:
+  name: "简体中文"
+  code: "zh_cn"
+  author: "youzilm"
+  version: "1.0.0"
+
+# 通用消息
+common:
+  prefix: "§6[§eYAE§6] §f"
+  success: "§a✓ §f"
+  error: "§c✗ §f"
+  warning: "§e⚠ §f"
+  info: "§bℹ §f"
+  no-permission: "§c你没有权限执行此操作！"
+  player-not-found: "§c玩家未找到：{player}"
+  invalid-amount: "§c无效金额：{amount}"
+  insufficient-balance: "§c余额不足！需要：{required}，当前：{balance}"
+
+# 命令相关
+commands:
+  usage: "§c用法：{usage}"
+  only-player: "§c只有玩家可以执行此命令！"
+
+# 经济相关
+economy:
+  balance:
+    self: "§a你的余额：§6{balance}"
+    other: "§a{player} 的余额：§6{balance}"
+    format: "§6{amount} §f{currency}"
+
+  pay:
+    success: "§a成功转账 §6{amount} §f给 {player}"
+    received: "§a收到 {player} 的转账：§6{amount}"
+    tax-deducted: "§c扣除税费：§6{tax}"
+    cooldown: "§c转账冷却中，请等待 {time} 秒后再试"
+
+  set:
+    success: "§a成功设置 {player} 的余额为：§6{balance}"
+
+  give:
+    success: "§a成功给 {player} 添加：§6{amount}"
+
+  take:
+    success: "§a成功从 {player} 扣除：§6{amount}"
+
+  # 交易历史
+  history:
+    title: "§6§l交易历史"
+    empty: "§c暂无交易记录"
+    header: "§7═════ §6交易历史 §7═════"
+    footer: "§7═══════════════════════"
+    item: "§e{type} §f{amount} §7→ {target} §8({time})"
+    types:
+      pay: "转账"
+      receive: "收款"
+      set: "设置"
+      give: "给予"
+      take: "扣除"
+      interest: "利息"
+      tax: "税费"
+
+# 银行相关
+banking:
+  account-created: "§a成功创建银行账户！"
+  account-deleted: "§c银行账户已删除！"
+  account-limit: "§c已达到银行账户数量上限！"
+  account-not-found: "§c银行账户未找到！"
+  deposit: "§a成功存款：§6{amount}"
+  withdraw: "§a成功取款：§6{amount}"
+  transfer: "§a成功转账：§6{amount}"
+
+# 利息系统
+interest:
+  received: "§a获得利息：§6{amount}"
+  rate-info: "§b当前利率：§6{rate}%"
+  min-balance: "§c余额不足，需要至少 §6{balance} §c才能获得利息"
+
+# PVP奖励
+pvp:
+  kill-reward: "§a击杀奖励：§6{amount}"
+  killed-penalty: "§c死亡惩罚：§6{amount}"
+
+# 管理命令
+admin:
+  reload: "§a插件配置重载成功！"
+  reload-failed: "§c插件配置重载失败！"
+
+# 错误消息
+errors:
+  configuration: "§c配置文件错误：{message}"
+  database: "§c数据库错误：{message}"
+  service: "§c服务错误：{message}"
+  unexpected: "§c发生未知错误：{message}"
+
+# GUI相关
+gui:
+  titles:
+    main: "§6§l经济系统"
+    balance: "§6§l余额查询"
+    history: "§6§l交易历史"
+    bank: "§6§l银行系统"
+    admin: "§6§l管理面板"
+
+  buttons:
+    balance: "§a余额查询"
+    history: "§e交易历史"
+    pay: "§b转账付款"
+    bank: "§6银行系统"
+    admin: "§c管理面板"
+    close: "§c关闭"
+    back: "§7返回"
+    next: "§a下一页"
+    prev: "§c上一页"
+
+  items:
+    player-head: "§e{player} 的头像"
+    balance-info: "§6余额信息\n§f当前余额：§6{balance}\n§f货币：§6{currency}"
+    transaction-item: "§e{time}\n§f类型：§6{type}\n§f金额：§6{amount}\n§f对象：§6{target}"
+
+# 时间格式
+time:
+  just-now: "刚刚"
+  seconds-ago: "{seconds}秒前"
+  minutes-ago: "{minutes}分钟前"
+  hours-ago: "{hours}小时前"
+  days-ago: "{days}天前"
+  date-format: "yyyy-MM-dd HH:mm:ss"
+
+# 数值格式
+number:
+  decimal-separator: "."
+  thousands-separator: ","
+  currency-format: "{symbol}{amount}"

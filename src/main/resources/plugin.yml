@@ -1,0 +1,103 @@
+name: YetAnotherEconomy
+main: com.yae.YetAnotherEconomy
+version: 1.0.0
+api-version: '1.20'
+description: A comprehensive economy plugin for Minecraft servers
+author: YAE Team
+website: https://github.com/yae-team/yet-another-economy
+
+# 插件依赖
+softdepend:
+  - Vault
+  - LuckPerms
+
+depend:
+  - TriumphGUI
+
+# 命令配置
+commands:
+  yae:
+    description: YetAnotherEconomy main command
+    usage: /yae <subcommand>
+    aliases: [economy, eco, money]
+    permission: yae.command.main
+
+# 权限配置
+permissions:
+  yae.*:
+    description: All YetAnotherEconomy permissions
+    default: op
+    children:
+      yae.command.*: true
+      yae.admin.*: true
+      yae.user.*: true
+  
+  yae.command.*:
+    description: All command permissions
+    default: op
+    children:
+      yae.command.main: true
+      yae.command.balance: true
+      yae.command.pay: true
+      yae.command.history: true
+  
+  yae.admin.*:
+    description: Admin permissions
+    default: op
+    children:
+      yae.admin.reload: true
+      yae.admin.set: true
+      yae.admin.give: true
+      yae.admin.take: true
+  
+  yae.user.*:
+    description: User permissions
+    default: true
+    children:
+      yae.user.balance: true
+      yae.user.pay: true
+      yae.user.history: true
+  
+  yae.command.main:
+    description: Access to main command
+    default: true
+  
+  yae.command.balance:
+    description: Check balance
+    default: true
+  
+  yae.command.pay:
+    description: Pay other players
+    default: true
+  
+  yae.command.history:
+    description: View transaction history
+    default: true
+  
+  yae.admin.reload:
+    description: Reload plugin configuration
+    default: op
+  
+  yae.admin.set:
+    description: Set player balance
+    default: op
+  
+  yae.admin.give:
+    description: Give money to player
+    default: op
+  
+  yae.admin.take:
+    description: Take money from player
+    default: op
+  
+  yae.user.balance:
+    description: View own balance
+    default: true
+  
+  yae.user.pay:
+    description: Pay other players
+    default: true
+  
+  yae.user.history:
+    description: View own transaction history
+    default: true

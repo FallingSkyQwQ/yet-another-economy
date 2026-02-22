@@ -1,0 +1,93 @@
+# YetAnotherEconomy 配置文件
+
+# 货币设置
+currency:
+  # 货币名称
+  name: "金币"
+  # 货币符号
+  symbol: "§6💰"
+  # 小数位数
+  decimals: 2
+  # 初始余额
+  starting-balance: 100.0
+  
+# 数据库设置
+database:
+  # 数据库类型: sqlite, mysql, mariadb
+  type: sqlite
+  # SQLite 设置
+  sqlite:
+    filename: "economy.db"
+  # MySQL/MariaDB 设置
+  mysql:
+    host: "localhost"
+    port: 3306
+    database: "yet_another_economy"
+    username: "root"
+    password: ""
+    # 连接池设置
+    pool-size: 10
+    connection-timeout: 30000
+    idle-timeout: 600000
+    max-lifetime: 1800000
+
+# 交易设置
+transactions:
+  # 是否记录交易历史
+  log-transactions: true
+  # 交易历史保存天数
+  history-days: 30
+  # 最大转账金额（0为无限制）
+  max-transfer-amount: 1000000.0
+  # 最小转账金额
+  min-transfer-amount: 0.01
+  # 转账税率 (0.0-1.0)
+  tax-rate: 0.0
+  # 是否启用转账冷却
+  enable-transfer-cooldown: false
+  # 转账冷却时间（秒）
+  transfer-cooldown: 60
+
+# 消息设置
+messages:
+  # 语言文件
+  language: "zh_cn"
+  # 消息前缀
+  prefix: "§6[§eYAE§6] §f"
+  
+# 功能设置
+features:
+  # 是否启用利息系统
+  interest:
+    enabled: false
+    # 利息率（每日）
+    rate: 0.01
+    # 最小余额才有利息
+    min-balance: 100.0
+    # 最大利息金额
+    max-interest: 1000.0
+  
+  # 是否启用银行系统
+  banking:
+    enabled: false
+    # 银行账户最大数量
+    max-accounts: 3
+    
+  # PVP 奖励设置
+  pvp:
+    enabled: false
+    # 击杀奖励百分比（被杀者余额的百分比）
+    kill-reward: 0.05
+    # 最大奖励金额
+    max-reward: 1000.0
+
+# 性能设置
+performance:
+  # 自动保存间隔（秒）
+  save-interval: 300
+  # 是否异步保存
+  async-save: true
+  # 缓存大小
+  cache-size: 1000
+  # 缓存过期时间（分钟）
+  cache-expire: 30
