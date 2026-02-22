@@ -411,7 +411,7 @@ public class ShopManager implements Service {
             
             try (PreparedStatement stmt = connection.prepareStatement(sql)) {
                 stmt.setString(1, itemId);
-                stmt.setDate(2, Date.valueOf(today));
+                stmt.setDate(2, java.sql.Date.valueOf(today));
                 
                 ResultSet rs = stmt.executeQuery();
                 if (rs.next()) {
@@ -500,7 +500,7 @@ public class ShopManager implements Service {
             try (PreparedStatement stmt = connection.prepareStatement(sql)) {
                 stmt.setString(1, itemId);
                 stmt.setString(2, playerId.toString());
-                stmt.setDate(3, Date.valueOf(today));
+                stmt.setDate(3, java.sql.Date.valueOf(today));
                 
                 ResultSet rs = stmt.executeQuery();
                 if (rs.next()) {

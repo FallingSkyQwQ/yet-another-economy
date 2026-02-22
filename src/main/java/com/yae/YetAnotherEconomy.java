@@ -244,10 +244,9 @@ public final class YetAnotherEconomy extends YAECoreBase {
         registerService(depositService);
         debug("Registered DepositService");
         
-        // Register ShopCommand
+        // Register ShopCommand - now auto-registered by constructor
         com.yae.api.shop.ShopCommand shopCommand = new com.yae.api.shop.ShopCommand(this);
-        registerCommand(shopCommand);
-        debug("Registered ShopCommand");
+        debug("ShopCommand created and auto-registered");
         
         debug("Core services registration completed");
     }

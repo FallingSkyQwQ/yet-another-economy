@@ -372,7 +372,7 @@ public class Loan {
         private double monthlyPayment = 0;
         private PaymentMethod paymentMethod = PaymentMethod.AUTOMATIC;
         private RepaymentMethod repaymentMethod = RepaymentMethod.EQUAL_INSTALLMENT;
-        private LoanStatus status = LoanStatus.PENDING;
+        private LoanStatus status = Loan.LoanStatus.PENDING;
         private int paymentsMade = 0;
         private int totalPayments = 0;
         private double totalInterestPaid = 0;
