@@ -409,6 +409,7 @@ public abstract class YAECoreBase extends org.bukkit.plugin.java.JavaPlugin impl
     }
     
     @Override
+    @SuppressWarnings("deprecation")
     @Nullable
     public ServiceConfig getConfiguration() {
         return this.configuration;

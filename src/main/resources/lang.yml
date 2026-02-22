@@ -1,137 +1,289 @@
 # YetAnotherEconomy 语言配置文件
-# Language configuration for YetAnotherEconomy
-# 支持的语言：zh_cn, en_us
-
-language-info:
-  name: "简体中文"
-  code: "zh_cn"
-  author: "youzilm"
-  version: "1.0.0"
+# 支持中文和英文，基于插件设置切换
+# 支持占位符替换和颜色代码 (&颜色码)
 
 # 通用消息
 common:
-  prefix: "§6[§eYAE§6] §f"
-  success: "§a✓ §f"
-  error: "§c✗ §f"
-  warning: "§e⚠ §f"
-  info: "§bℹ §f"
-  no-permission: "§c你没有权限执行此操作！"
-  player-not-found: "§c玩家未找到：{player}"
-  invalid-amount: "§c无效金额：{amount}"
-  insufficient-balance: "§c余额不足！需要：{required}，当前：{balance}"
+  # 通用颜色
+  colors:
+    success: "&a"     # 成功
+    error: "&c"       # 错误
+    warning: "&6"     # 警告
+    info: "&9"        # 信息
+    highlight: "&e"   # 高亮
+    money: "&6"       # 货币
+    rate: "&b"        # 利率
+    primary: "&7"     # 主要文本
+    secondary: "&f"   # 次要文本
+  
+  # 通用图标
+  icons:
+    success: "✅"
+    error: "❌"
+    warning: "⚠️"
+    info: "ℹ️"
+    money: "💰"
+    bank: "🏦"
+    deposit: "💵"
+    withdrawal: "💸"
+    interest: "📊"
+    time: "⏰"
+    check: "✔️"
+    cross: "✖️"
+    arrow: "→"
 
-# 命令相关
-commands:
-  usage: "§c用法：{usage}"
-  only-player: "§c只有玩家可以执行此命令！"
+# 插件信息
+prefix: "&6[YAE] &f"
+welcome: "{prefix}欢迎使用 YetAnotherEconomy 经济系统!"
+enabled: "{prefix}&a经济系统已启用 v{version}"
+disabled: "{prefix}经济系统已禁用"
+reload: "{prefix}配置已重载"
 
-# 经济相关
-economy:
-  balance:
-    self: "§a你的余额：§6{balance}"
-    other: "§a{player} 的余额：§6{balance}"
-    format: "§6{amount} §f{currency}"
+# 银行系统
+bank:
+  # 银行信息
+  info:
+    title: "&6=== 银行账户 ==="
+    account_number: "&f账户号码: &e{account_number}"
+    account_type: "&f账户类型: &b{account_type}"
+    balance: "&f当前余额: &a{balance}"
+    available_balance: "&f可用余额: &e{available_balance}"
+    fixed_deposits: "&f定期总额: &6{fixed_deposits}"
+    total_balance: "&f总余额: &6{total_balance}"
+    credit_score: "&f信用评分: &d{score}/850"
+    creation_date: "&f创建时间: &7{date}"
+    status: "&f账户状态: {status}"
+    interest_rate: "&f适用利率: &b{rate}%"
+    
+  # 状态描述
+  status:
+    active: "&a正常"
+    frozen: "&c冻结"
+    closed: "&7已关闭"
+    suspended: "&6暂停"
+  
+  # 账户类型
+  account_types:
+    checking: "&a活期账户"
+    savings: "&e储蓄账户"
+    fixed_deposit: "&9定期账户"
+    loan: "&c贷款账户"
+  
+  # 操作反馈
+  messages:
+    no_accounts: "{icons.error} 您还没有银行账户"
+    account_created: "{icons.success} 新账户创建成功! 账户号码: &b{account_number}"
+    account_limit_reached: "{icons.error} 已达到最大账户数量限制 ({max_accounts})"
+    insufficient_balance: "{icons.error} 账户余额不足"
+    account_not_found: "{icons.error} 未找到指定账户"
+    account_not_active: "{icons.error} 账户状态异常, 无法进行交易"
+    service_unavailable: "{icons.error} 银行服务暂不可用"
 
-  pay:
-    success: "§a成功转账 §6{amount} §f给 {player}"
-    received: "§a收到 {player} 的转账：§6{amount}"
-    tax-deducted: "§c扣除税费：§6{tax}"
-    cooldown: "§c转账冷却中，请等待 {time} 秒后再试"
+# 存款系统
+deposits:
+  # 活期存款
+  current:
+    title: "&a=== 活期存款 ==="
+    description: "&7随时存取，按日复利计息"
+    processing: "{icons.info} 正在处理活期存款..."
+    success: |
+      {icons.success} 活期存款成功!
+      &f 存款金额: {icons.money} {money}
+      &f 新余额: {icons.money} {new_balance}
+    failed: "{icons.error} 活期存款失败: {reason}"
+    
+    # 快速存款选项
+    quick_options: "&e快速存款选项:"
+    deposit_all: "{icons.money} 全部存款 (¥{amount})"
+    manual_input: "{icons.info} 输入自定义金额"
+    custom_amount: "{icons.info} 自定义金额: ¥{amount}"
+    
+    # 利息预览
+    interest_preview: |
+      &f月预期收益: {icons.interest} ¥{monthly_interest}
+      &f年预期收益: {icons.interest} ¥{yearly_interest}
+    daily_interest: "&f日利息: {icons.interest} ¥{interest}"
+    monthly_interest: "&f月利息: {icons.interest} ¥{interest}"
+    yearly_interest: "&f年利息: {icons.interest} ¥{interest}"
+    current_rate: "&f当前利率: {icons.rate} {rate}%/年"
+    simple_interest: "&f单利预估: ¥{interest}"
+    compound_interest: "&f复利预估: ¥{interest}"
+    
+  # 定期存款
+  fixed:
+    title: "&b=== 定期存款 ==="
+    description: "&7期限越长，利率越高"
+    invalid_term: "{icons.error} 无效的存款期限: {term} 个月"
+    available_terms: "{icons.info} 可用期限: {terms}"
+    term_selected: "{icons.success} 已选择 {term} 存期"
+    amount_selected: "{icons.success} 已选择存款金额: {icons.money} ¥{amount}"
+    insufficient_balance: "{icons.error} 账户余额不足"
+    
+    processing: "{icons.info} 正在处理定期存款..."
+    success: |
+      {icons.success} 定期存款创建成功!
+      &f 存款号码: &e{deposit_number}
+      &f 存款金额: {icons.money} ¥{amount}
+      &f 存期: &a{term}
+      &f 到期收益: {icons.money} ¥{maturity_amount}
+      &f 到期日: &7{date}
+    
+    failed: "{icons.error} 定期存款失败: {reason}"
+    early_withdrawal: "{icons.warning} 提前支取将产生 {penalty_rate}% 的罚金"
+    
+    # 期限选项
+    terms:
+      3_months: "&73月期"
+      6_months: "&66月期"
+      1_year: "&a1年期"
+      2_years: "&b2年期"
+      3_years: "&e3年期"
+      5_years: "&c5年期"
+    
+    # 金额选项
+    amounts:
+      1000: "💸 1000 (入门)"
+      5000: "💵 5000 (标准)"
+      10000: "💰 10000 (递增)"
+      50000: "💎 50000 (大额)"
+      100000: "🏆 100000 (巨资)"
+      500000: "👑 500000 (巨富)"
+      custom: "📝 自定义金额"
+      all: "💎 存全部可用余额"
+      
+  # 利率信息
+  rates:
+    current_title: "&b=== 存款利率 ==="
+    current_account: "&f活期存款: {icons.rate} {rate}%/年"
+    savings_account: "&f储蓄存款: {icons.rate} {rate}%/年"
+    fixed_terms: "&f定期存款:"
+    term_rate: "  &7- &f{months}月: {icons.rate} {rate}%/年"
+    compound_method: "&f计息方式: {icons.interest} 日复利"
+    payment_cycle: "&f付息周期: {icons.time} 每日"
+    
+    penalty_rate: "&f提前支取罚息: {icons.warning} {rate}%"
+    
+  # 计算工具
+  calculator:
+    title: "&6=== 利息计算器 ==="
+    usage: "&f用法: /yae bank calculate <本金> <天数> [类型]"
+    types: "&f类型: current(活期), fixed(定期), compound(复利)"
+    result_title: "&6=== 利息预览 ==="
+    principal: "&f本金: {icons.money} {amount}"
+    days: "&f天数: {icons.time} {days}"
+    type: "&f类型: {type}"
+    rate_used: "&f适用利率: {icons.rate} {rate}%"
+    estimated_interest: "&f预计利息: {icons.interest} {interest}"
+    total_amount: "&f到期总额: {icons.money} {total}"
+    
+  # 定期存款列表
+  fixed_deposit_list:
+    title: "&6=== 定期存款列表 ==="
+    no_deposits: "{icons.info} 您当前没有定期存款"
+    deposit_info: |
+      &7定期 #{number}: &e{balance} &7| &7利率: &b{rate}% &7| &7剩余: &c{days}天 &7| &7状态: &a{status}
+    
+    status:
+      active: "正常"
+      matured: "已到期"
+      withdrawn: "已支取"    
+      closed: "已关闭"
 
-  set:
-    success: "§a成功设置 {player} 的余额为：§6{balance}"
-
-  give:
-    success: "§a成功给 {player} 添加：§6{amount}"
-
-  take:
-    success: "§a成功从 {player} 扣除：§6{amount}"
-
-  # 交易历史
-  history:
-    title: "§6§l交易历史"
-    empty: "§c暂无交易记录"
-    header: "§7═════ §6交易历史 §7═════"
-    footer: "§7═══════════════════════"
-    item: "§e{type} §f{amount} §7→ {target} §8({time})"
-    types:
-      pay: "转账"
-      receive: "收款"
-      set: "设置"
-      give: "给予"
-      take: "扣除"
-      interest: "利息"
-      tax: "税费"
-
-# 银行相关
-banking:
-  account-created: "§a成功创建银行账户！"
-  account-deleted: "§c银行账户已删除！"
-  account-limit: "§c已达到银行账户数量上限！"
-  account-not-found: "§c银行账户未找到！"
-  deposit: "§a成功存款：§6{amount}"
-  withdraw: "§a成功取款：§6{amount}"
-  transfer: "§a成功转账：§6{amount}"
-
-# 利息系统
-interest:
-  received: "§a获得利息：§6{amount}"
-  rate-info: "§b当前利率：§6{rate}%"
-  min-balance: "§c余额不足，需要至少 §6{balance} §c才能获得利息"
-
-# PVP奖励
-pvp:
-  kill-reward: "§a击杀奖励：§6{amount}"
-  killed-penalty: "§c死亡惩罚：§6{amount}"
-
-# 管理命令
-admin:
-  reload: "§a插件配置重载成功！"
-  reload-failed: "§c插件配置重载失败！"
+# 提款系统（预留）
+withdrawal:
+  processing: "{icons.progress} 正在处理提款..."
+  success: "{icons.success} 提款成功! 金额: {icons.money} {amount}"
+  failed: "{icons.error} 提款失败: {reason}"
+  penalty_applied: "{icons.warning} 已应用罚金: {penalty}%"
 
 # 错误消息
 errors:
-  configuration: "§c配置文件错误：{message}"
-  database: "§c数据库错误：{message}"
-  service: "§c服务错误：{message}"
-  unexpected: "§c发生未知错误：{message}"
+  # 通用错误
+  general: "{icons.error} 发生错误: {reason}"
+  no_permission: "{icons.error} 您没有权限执行此操作"
+  service_unavailable: "{icons.error} 服务暂不可用"
+  configuration_error: "{icons.error} 配置错误"
+  internal_error: "{icons.error} 内部错误，请联系管理员"
+  
+  # 参数错误
+  invalid_amount: "{icons.error} 无效金额: {amount}"
+  amount_too_small: "{icons.error} 金额过小，最小支持: {min_amount}"
+  amount_too_large: "{icons.error} 金额过大，最大支持: {max_amount}"
+  invalid_term: "{icons.error} 无效的期限: {term}"
+  invalid_command: "{icons.error} 无效命令用法: {usage}"
+  argument_required: "{icons.error} 需要参数: {param}"
+  
+  # 业务错误
+  insufficient_funds: "{icons.error} 资金不足"
+  no_active_account: "{icons.error} 没有活跃的银行账户"
+  account_not_found: "{icons.error} 未找到账户"
+  deposit_failed: "{icons.error} 存款失败: {reason}"
+  invalid_deposit_type: "{icons.error} 无效的存款类型: {type}"
+  
+  # 系统错误
+  database_error: "{icons.error} 数据库错误"
+  network_error: "{icons.error} 网络错误"
+  timeout_error: "{icons.error} 操作超时"
+  
+  # 玩家错误
+  player_only: "{icons.error} 此命令只能由玩家使用"
+  player_not_found: "{icons.error} 玩家未找到: {player}"
+  player_offline: "{icons.error} 玩家不在线: {player}"
+  
+  # 配置错误
+  feature_disabled: "{icons.error} 功能已禁用: {feature}"
+  service_not_enabled: "{icons.error} 服务未启用: {service}"
 
-# GUI相关
-gui:
-  titles:
-    main: "§6§l经济系统"
-    balance: "§6§l余额查询"
-    history: "§6§l交易历史"
-    bank: "§6§l银行系统"
-    admin: "§6§l管理面板"
-
-  buttons:
-    balance: "§a余额查询"
-    history: "§e交易历史"
-    pay: "§b转账付款"
-    bank: "§6银行系统"
-    admin: "§c管理面板"
-    close: "§c关闭"
-    back: "§7返回"
-    next: "§a下一页"
-    prev: "§c上一页"
-
-  items:
-    player-head: "§e{player} 的头像"
-    balance-info: "§6余额信息\n§f当前余额：§6{balance}\n§f货币：§6{currency}"
-    transaction-item: "§e{time}\n§f类型：§6{type}\n§f金额：§6{amount}\n§f对象：§6{target}"
-
-# 时间格式
-time:
-  just-now: "刚刚"
-  seconds-ago: "{seconds}秒前"
-  minutes-ago: "{minutes}分钟前"
-  hours-ago: "{hours}小时前"
-  days-ago: "{days}天前"
-  date-format: "yyyy-MM-dd HH:mm:ss"
-
-# 数值格式
-number:
-  decimal-separator: "."
-  thousands-separator: ","
-  currency-format: "{symbol}{amount}"
+# 成功消息
+success:
+  operation_completed: "{icons.success} 操作完成"
+  account_created: "{icons.success} 账户创建成功"
+  deposit_success: "{icons.success} 存款成功"
+  config_reloaded: "{icons.success} 配置已重载"
+  data_saved: "{icons.success} 数据已保存"
+  
+# 提示信息
+tips:
+  use_help: "{icons.info} 使用 /yae bank help 查看可用命令"
+  check_balance: "{icons.info} 使用 /yae bank info 查看账户信息"
+  higher_rates: "{icons.info} 定期存款期限越长，利率越高"
+  daily_interest: "{icons.info} 活期存款按日复利计息"
+  compound_interest: "{icons.info} 复利让财富增长更快"
+  
+# 进度消息
+progress:
+  processing: "{icons.progress} 处理中..."
+  loading: "{icons.progress} 加载中..."
+  calculating: "{icons.progress} 计算中..."
+  saving: "{icons.progress} 保存中..."
+  
+# 命令帮助
+commands:
+  bank_help:
+    title: "&6=== 银行命令帮助 ==="
+    bank: "&a/yae bank &f- 打开银行主界面"
+    deposit: "&a/yae bank deposit [current|fixed] [amount|months amount] &f- 存款操作"
+    current: "&a/yae bank current [amount] &f- 活期存款"
+    fixed: "&a/yae bank fixed <months> <amount> &f- 定期存款"
+    info: "&a/yae bank info &f- 显示账户信息"
+    list: "&a/yae bank list &f- 列出所有账户"
+    rate: "&a/yae bank rate &f- 显示当前利率"
+    calculate: "&a/yae bank calculate <principal> <days> [type] &f- 计算利息"
+    gui: "&a/yae bank gui &f- 打开银行界面"
+    help: "&a/yae bank help &f- 显示此帮助信息"
+    
+  available_terms: "&f可用定期期限: {terms}"
+  interest_types: "&f利息类型: current(活期), fixed(定期), compound(复利)"
+  
+# 系统状态
+system:
+  status:
+    enabled: "{icons.success} 系统已启用"
+    disabled: "{icons.error} 系统已禁用"
+    initializing: "{icons.progress} 系统初始化中..."
+    running: "{icons.success} 系统运行中"
+    stopping: "{icons.warning} 系统停止中..."
+    reloading: "{icons.progress} 系统重载中..."
+    failed: "{icons.error} 系统启动失败"
+    healthy: "{icons.success} 系统健康"
+    unhealthy: "{icons.warning} 系统异常"

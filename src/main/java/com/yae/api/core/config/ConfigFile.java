@@ -163,6 +163,37 @@ public final class ConfigFile {
     }
     
     /**
+     * Get a long value from the configuration
+     * @param key the key to look up
+     * @return the long value, or null if not found or invalid
+     */
+    @Nullable
+    public Long getLong(@NotNull String key) {
+        return asServiceConfig().getLong(key);
+    }
+    
+    /**
+     * Get a long value from the configuration with default
+     * @param key the key to look up
+     * @param defaultValue the default value if key not found
+     * @return the long value, or default value
+     */
+    public long getLong(@NotNull String key, long defaultValue) {
+        return asServiceConfig().getLong(key, defaultValue);
+    }
+    
+    /**
+     * Get a list of integers from the configuration
+     * @param key the key to look up
+     * @param defaultValue the default value if key not found
+     * @return the integer list, or default value
+     */
+    @NotNull
+    public List<Integer> getIntegerList(@NotNull String key, @NotNull List<Integer> defaultValue) {
+        return asServiceConfig().getIntegerList(key, defaultValue);
+    }
+    
+    /**
      * Get a nested configuration section
      * @param key the key to the section
      * @return a new ConfigFile containing the nested section, or null if not found

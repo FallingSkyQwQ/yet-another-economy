@@ -70,8 +70,38 @@ features:
   # 是否启用银行系统
   banking:
     enabled: false
-    # 银行账户最大数量
-    max-accounts: 3
+    # 银行账户最大数量（每人/组织）
+    max-accounts-per-owner: 3
+    # 默认利率（年利率）
+    default-interest-rate: 0.01
+    # 提前支取罚金率
+    early-withdrawal-penalty-rate: 0.05
+    # 利息计算间隔（秒）
+    interest-calculation-interval: 3600
+    # 数据保存间隔（秒）
+    save-interval: 300
+    # 定期存款选项
+    fixed-deposits:
+      # 支持的存期（月数）
+      available-terms: [3, 6, 12, 24, 36, 60]
+      # 存期对应的利率（年利率）
+      term-interest-rates:
+        3: 0.0125   # 3个月 - 1.25%
+        6: 0.015    # 6个月 - 1.5%  
+        12: 0.02    # 1年 - 2%
+        24: 0.025   # 2年 - 2.5%
+        36: 0.03    # 3年 - 3%
+        60: 0.035   # 5年 - 3.5%
+    # 银行账户交易限额
+    transaction-limits:
+      # 单笔最大存款金额（0为无限制）
+      max-deposit-per-transaction: 1000000.0
+      # 单笔最大取款金额（0为无限制）
+      max-withdrawal-per-transaction: 500000.0
+      # 每日最大交易金额（0为无限制）
+      max-daily-transaction-amount: 5000000.0
+      # 最大转账金额（0为无限制）
+      max-transfer-amount: 1000000.0
     
   # PVP 奖励设置
   pvp:

@@ -83,7 +83,17 @@ public enum ServiceType {
     /**
      * Messaging service - Message handling and localization
      */
-    MESSAGING("messaging", "Message Management");
+    MESSAGING("messaging", "Message Management"),
+    
+    /**
+     * Credit scoring service - Handles credit score calculation and management
+     */
+    CREDIT("credit", "Credit Scoring Service"),
+    
+    /**
+     * Loan service - Handles loan applications and management
+     */
+    LOAN("loan", "Loan Service");
     
     private final String key;
     private final String description;

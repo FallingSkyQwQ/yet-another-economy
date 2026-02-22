@@ -457,19 +457,139 @@ public final class Configuration {
         
         public static final class BankingConfig {
             private final boolean enabled;
-            private final int maxAccounts;
+            private final int maxAccountsPerOwner;
+            private final double defaultInterestRate;
+            private final double savingsInterestRate;
+            private final double earlyWithdrawalPenaltyRate;
+            private final long interestCalculationInterval;
+            private final long saveInterval;
+            private final int[] availableTerms;
+            private final Map<Integer, Double> termInterestRates;
+            private final TransactionLimitsConfig transactionLimits;
             
             public BankingConfig(@Nullable ConfigFile section) {
                 this.enabled = section != null ? section.getBoolean("enabled", false) : false;
-                this.maxAccounts = section != null ? section.getInt("max-accounts", 3) : 3;
+                this.maxAccountsPerOwner = section != null ? section.getInt("max-accounts-per-owner", 3) : 3;
+                this.defaultInterestRate = section != null ? section.getDouble("default-interest-rate", 0.01) : 0.01;
+                this.savingsInterestRate = section != null ? section.getDouble("savings-interest-rate", 0.015) : 0.015;
+                this.earlyWithdrawalPenaltyRate = section != null ? section.getDouble("early-withdrawal-penalty-rate", 0.05) : 0.05;
+                this.interestCalculationInterval = section != null ? section.getLong("interest-calculation-interval", 3600L) : 3600L;
+                this.saveInterval = section != null ? section.getLong("save-interval", 300L) : 300L;
+                
+                // 读取存期配置
+                ConfigFile fixedDepositsSection = section != null ? section.getSection("fixed-deposits") : null;
+                this.availableTerms = fixedDepositsSection != null ? 
+                    fixedDepositsSection.getIntegerList("available-terms", Arrays.asList(3, 6, 12, 24, 36, 60))
+                        .stream().mapToInt(Integer::intValue).toArray() : 
+                    new int[]{3, 6, 12, 24, 36, 60};
+                
+                // 读取存期利率配置
+                this.termInterestRates = new HashMap<>();
+                if (fixedDepositsSection != null) {
+                    ConfigFile ratesSection = fixedDepositsSection.getSection("term-interest-rates");
+                    if (ratesSection != null) {
+                        for (int term : availableTerms) {
+                            double rate = ratesSection.getDouble(String.valueOf(term), 0.02);
+                            termInterestRates.put(term, rate);
+                        }
+                    }
+                }
+                // 设置默认利率
+                if (termInterestRates.isEmpty()) {
+                    termInterestRates.put(3, 0.0125);
+                    termInterestRates.put(6, 0.015);
+                    termInterestRates.put(12, 0.02);
+                    termInterestRates.put(24, 0.025);
+                    termInterestRates.put(36, 0.03);
+                    termInterestRates.put(60, 0.035);
+                }
+                
+                // 读取交易限额配置
+                ConfigFile transactionLimitsSection = section != null ? section.getSection("transaction-limits") : null;
+                this.transactionLimits = new TransactionLimitsConfig(transactionLimitsSection);
             }
             
             public boolean isEnabled() {
                 return enabled;
             }
             
+            public int getMaxAccountsPerOwner() {
+                return maxAccountsPerOwner;
+            }
+            
+            public double getDefaultInterestRate() {
+                return defaultInterestRate;
+            }
+            
+            public double getSavingsInterestRate() {
+                return savingsInterestRate;
+            }
+            
+            public double getEarlyWithdrawalPenaltyRate() {
+                return earlyWithdrawalPenaltyRate;
+            }
+            
+            public long getInterestCalculationInterval() {
+                return interestCalculationInterval;
+            }
+            
+            public long getSaveInterval() {
+                return saveInterval;
+            }
+            
+            public int[] getAvailableTerms() {
+                return availableTerms;
+            }
+            
+            public double getTermInterestRate(int termMonths) {
+                return termInterestRates.getOrDefault(termMonths, 0.02);
+            }
+            
+            public TransactionLimitsConfig getTransactionLimits() {
+                return transactionLimits;
+            }
+            
+            public DepositsConfig getDeposits() {
+                return new DepositsConfig();
+            }
+            
+            public static final class TransactionLimitsConfig {
+                private final double maxDepositPerTransaction;
+                private final double maxWithdrawalPerTransaction;
+                private final double maxDailyTransactionAmount;
+                private final double maxTransferAmount;
+                
+                public TransactionLimitsConfig(@Nullable ConfigFile section) {
+                    this.maxDepositPerTransaction = section != null ? 
+                        section.getDouble("max-deposit-per-transaction", 1000000.0) : 1000000.0;
+                    this.maxWithdrawalPerTransaction = section != null ? 
+                        section.getDouble("max-withdrawal-per-transaction", 500000.0) : 500000.0;
+                    this.maxDailyTransactionAmount = section != null ? 
+                        section.getDouble("max-daily-transaction-amount", 5000000.0) : 5000000.0;
+                    this.maxTransferAmount = section != null ? 
+                        section.getDouble("max-transfer-amount", 1000000.0) : 1000000.0;
+                }
+                
+                public double getMaxDepositPerTransaction() {
+                    return maxDepositPerTransaction;
+                }
+                
+                public double getMaxWithdrawalPerTransaction() {
+                    return maxWithdrawalPerTransaction;
+                }
+                
+                public double getMaxDailyTransactionAmount() {
+                    return maxDailyTransactionAmount;
+                }
+                
+                public double getMaxTransferAmount() {
+                    return maxTransferAmount;
+                }
+            }
+            
+            // 兼容旧配置的getter方法
             public int getMaxAccounts() {
-                return maxAccounts;
+                return maxAccountsPerOwner;
             }
         }
         
@@ -536,6 +656,30 @@ public final class Configuration {
         
         public long getCacheExpire() {
             return cacheExpire;
+        }
+    }
+    
+    public static final class DepositsConfig {
+        private final double minDepositAmount;
+        private final double maxDepositAmount;
+        private final boolean enabled;
+        
+        public DepositsConfig() {
+            this.enabled = true;
+            this.minDepositAmount = 0.01;
+            this.maxDepositAmount = 999999999.99;
+        }
+        
+        public boolean isEnabled() {
+            return enabled;
+        }
+        
+        public double getMinDepositAmount() {
+            return minDepositAmount;
+        }
+        
+        public double getMaxDepositAmount() {
+            return maxDepositAmount;
         }
     }
     
@@ -673,8 +817,25 @@ public final class Configuration {
             
             // Banking system validation
             FeaturesConfig.BankingConfig banking = features.getBanking();
-            if (banking.getMaxAccounts() <= 0) {
+            if (banking.getMaxAccountsPerOwner() <= 0) {
                 throw new ConfigurationValidationException("Maximum number of bank accounts must be positive");
+            }
+            
+            if (banking.getDefaultInterestRate() < 0 || banking.getDefaultInterestRate() > 1) {
+                throw new ConfigurationValidationException("Default interest rate must be between 0.0 and 1.0");
+            }
+            
+            if (banking.getEarlyWithdrawalPenaltyRate() < 0 || banking.getEarlyWithdrawalPenaltyRate() > 1) {
+                throw new ConfigurationValidationException("Early withdrawal penalty rate must be between 0.0 and 1.0");
+            }
+            
+            // Validate deposit configuration
+            if (banking.getTransactionLimits().getMaxDepositPerTransaction() < 0) {
+                throw new ConfigurationValidationException("Maximum deposit per transaction cannot be negative");
+            }
+            
+            if (banking.getTransactionLimits().getMaxWithdrawalPerTransaction() < 0) {
+                throw new ConfigurationValidationException("Maximum withdrawal per transaction cannot be negative");
             }
             
             // PvP system validation

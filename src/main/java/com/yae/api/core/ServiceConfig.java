@@ -2,6 +2,10 @@ package com.yae.api.core;
 
 import java.util.Collections;
 import java.util.Map;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.ArrayList;
 import java.util.HashMap;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -173,6 +177,76 @@ public final class ServiceConfig {
      */
     @NotNull
     public Map<String, Object> getAll() {
+        return new HashMap<>(config);
+    }
+    
+    /**
+     * Gets a long value from the configuration
+     * @param key the configuration key
+     * @return the long value, or null if not found or not valid
+     */
+    @Nullable
+    public Long getLong(@NotNull String key) {
+        Object value = config.get(key);
+        if (value instanceof Number) {
+            return ((Number) value).longValue();
+        }
+        if (value instanceof String) {
+            try {
+                return Long.parseLong((String) value);
+            } catch (NumberFormatException e) {
+                return null;
+            }
+        }
+        return null;
+    }
+    
+    /**
+     * Gets a long value from the configuration with default
+     * @param key the configuration key
+     * @param defaultValue the default value if key not found
+     * @return the long value, or default value
+     */
+    public long getLong(@NotNull String key, long defaultValue) {
+        Long value = getLong(key);
+        return value != null ? value : defaultValue;
+    }
+    
+    /**
+     * Gets a list of integers from the configuration
+     * @param key the configuration key
+     * @param defaultValue the default value if key not found
+     * @return the integer list, or default value
+     */
+    @NotNull
+    public List<Integer> getIntegerList(@NotNull String key, @NotNull List<Integer> defaultValue) {
+        Object value = config.get(key);
+        if (value instanceof List) {
+            List<?> rawList = (List<?>) value;
+            List<Integer> result = new ArrayList<>();
+            for (Object item : rawList) {
+                if (item instanceof Integer) {
+                    result.add((Integer) item);
+                } else if (item instanceof Number) {
+                    result.add(((Number) item).intValue());
+                } else if (item instanceof String) {
+                    try {
+                        result.add(Integer.parseInt((String) item));
+                    } catch (NumberFormatException e) {
+                        // Skip invalid items
+                    }
+                }
+            }
+            return result.isEmpty() ? defaultValue : result;
+        }
+        return defaultValue;
+    }
+    
+    /**
+     * Creates a new ServiceConfig with an additional key-value pair
+     * @param key the key to add
+     * @param value the value to add
+     * @return a new ServiceConfig with the added key-value pair
         return config;
     }
     

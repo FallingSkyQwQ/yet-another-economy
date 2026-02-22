@@ -8,6 +8,7 @@ import com.yae.api.core.config.ConfigurationManager;
 import com.yae.api.core.config.ConfigurationManager.ConfigurationInitializationException;
 import com.yae.api.core.config.Configuration;
 import com.yae.api.database.DatabaseService;
+import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -34,14 +35,14 @@ public final class YetAnotherEconomy extends YAECoreBase {
         // Initialize core
         if (!initialize()) {
             logger.severe("Failed to initialize YetAnotherEconomy! Disabling plugin...");
-            getPluginLoader().disablePlugin(this);
+            Bukkit.getPluginManager().disablePlugin(this);
             return;
         }
         
         // Startup
         if (!startup()) {
             logger.severe("Failed to start YetAnotherEconomy! Disabling plugin...");
-            getPluginLoader().disablePlugin(this);
+            Bukkit.getPluginManager().disablePlugin(this);
             return;
         }
         
@@ -212,6 +213,41 @@ public final class YetAnotherEconomy extends YAECoreBase {
         com.yae.api.database.DatabaseService databaseService = new com.yae.api.database.DatabaseService(this);
         registerService(databaseService);
         debug("Registered DatabaseService");
+        
+        // Register EconomyService
+        com.yae.api.services.EconomyService economyService = new com.yae.api.services.EconomyService(this);
+        registerService(economyService);
+        debug("Registered EconomyService");
+        
+        // Register ShopManager
+        com.yae.api.shop.ShopManager shopManager = new com.yae.api.shop.ShopManager(this);
+        registerService(shopManager);
+        debug("Registered ShopManager");
+        
+        // Register PurchaseService
+        com.yae.api.shop.PurchaseService purchaseService = new com.yae.api.shop.PurchaseService(this);
+        registerService(purchaseService);
+        debug("Registered PurchaseService");
+        
+        // Register BankAccountManager
+        com.yae.api.bank.BankAccountManager bankService = new com.yae.api.bank.BankAccountManager(this);
+        registerService(bankService);
+        debug("Registered BankAccountManager");
+        
+        // Register InterestCalculator
+        com.yae.api.bank.InterestCalculator interestService = new com.yae.api.bank.InterestCalculator(this);
+        registerService(interestService);
+        debug("Registered InterestCalculator");
+        
+        // Register DepositService
+        com.yae.api.bank.DepositService depositService = new com.yae.api.bank.DepositService(this);
+        registerService(depositService);
+        debug("Registered DepositService");
+        
+        // Register ShopCommand
+        com.yae.api.shop.ShopCommand shopCommand = new com.yae.api.shop.ShopCommand(this);
+        registerCommand(shopCommand);
+        debug("Registered ShopCommand");
         
         debug("Core services registration completed");
     }
