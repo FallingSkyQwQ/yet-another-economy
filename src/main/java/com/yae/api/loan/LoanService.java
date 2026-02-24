@@ -5,22 +5,31 @@ import com.yae.api.core.ServiceConfig;
 import com.yae.api.core.ServiceType;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+
 /**
- * Minimal Loan service - stub implementation for basic compilation
- * This is a simplified version that provides basic service infrastructure
- * Full implementation requires extensive database support and credit integration
+ * Simplified Loan Service for basic mortgage loans
+ * Provides minimal functionality to ensure compilation and basic operations
  */
 public class LoanService implements Service {
     
     private ServiceConfig config;
     private boolean enabled = false;
+    private final Map<String, SimpleLoan> loans = new ConcurrentHashMap<>();
+    private final Map<UUID, List<String>> playerLoans = new ConcurrentHashMap<>();
     
     public LoanService() {
+        this(null);
+    }
+    
+    public LoanService(com.yae.YetAnotherEconomy plugin) {
+        // Plugin parameter is kept for future extension but not currently used
     }
 
     @Override
     public @NotNull String getName() {
-        return "Loan Service";
+        return "Simple Loan Service";
     }
 
     @Override
@@ -29,13 +38,12 @@ public class LoanService implements Service {
     }
 
     @Override
-    @org.jetbrains.annotations.Nullable
     public ServiceConfig getConfig() {
         return config;
     }
 
     @Override
-    public void setConfig(@org.jetbrains.annotations.Nullable ServiceConfig config) {
+    public void setConfig(ServiceConfig config) {
         this.config = config;
     }
 
@@ -53,6 +61,8 @@ public class LoanService implements Service {
     @Override
     public void shutdown() {
         this.enabled = false;
+        loans.clear();
+        playerLoans.clear();
     }
 
     @Override
@@ -68,5 +78,46 @@ public class LoanService implements Service {
     @Override
     public boolean dependsOn(@NotNull ServiceType serviceType) {
         return false;
+    }
+    
+    // Simple loan operations
+    public SimpleLoan createLoan(UUID playerId, double amount, int termMonths, double interestRate) {
+        String loanId = generateLoanId();
+        SimpleLoan loan = new SimpleLoan(loanId, playerId, amount, termMonths, interestRate);
+        loans.put(loanId, loan);
+        playerLoans.computeIfAbsent(playerId, k -> new ArrayList<>()).add(loanId);
+        return loan;
+    }
+    
+    public SimpleLoan getLoan(String loanId) {
+        return loans.get(loanId);
+    }
+    
+    public List<SimpleLoan> getPlayerLoans(UUID playerId) {
+        List<String> loanIds = playerLoans.get(playerId);
+        if (loanIds == null) return Collections.emptyList();
+        
+        List<SimpleLoan> result = new ArrayList<>();
+        for (String loanId : loanIds) {
+            SimpleLoan loan = loans.get(loanId);
+            if (loan != null) result.add(loan);
+        }
+        return result;
+    }
+    
+    public boolean makePayment(String loanId, double amount) {
+        SimpleLoan loan = loans.get(loanId);
+        if (loan == null) return false;
+        
+        return loan.makePayment(amount);
+    }
+    
+    public boolean isOverdue(String loanId) {
+        SimpleLoan loan = loans.get(loanId);
+        return loan != null && loan.isOverdue();
+    }
+    
+    private String generateLoanId() {
+        return "LOAN-" + System.currentTimeMillis() + "-" + (int)(Math.random() * 1000);
     }
 }

@@ -6,44 +6,44 @@ package com.yae.api.credit;
  */
 public enum CreditGrade {
     /**
-     * Excellent credit (800-850)
+     * Excellent credit (750-850)
      * - Lowest interest rates
      * - Highest credit limits
      * - Premium loan products
      */
-    A(800, 850, "优秀", "§a★★★★★", 0.035, 1000000.0),
+    A(750, 850, "优秀", "§a★★★★★", 0.035, 1000000.0),
     
     /**
-     * Good credit (740-799)
+     * Good credit (650-749)
      * - Low interest rates
      * - High credit limits
      * - Good loan products
      */
-    B(740, 799, "良好", "§2★★★★☆", 0.045, 500000.0),
+    B(650, 749, "良好", "§2★★★★☆", 0.045, 500000.0),
     
     /**
-     * Average credit (670-739)
+     * Average credit (550-649)
      * - Moderate interest rates
      * - Moderate credit limits
      * - Standard loan products
      */
-    C(670, 739, "一般", "§e★★★☆☆", 0.065, 200000.0),
+    C(550, 649, "一般", "§e★★★☆☆", 0.065, 200000.0),
     
     /**
-     * Below average credit (580-669)
+     * Below average credit (450-549)
      * - Higher interest rates
      * - Lower credit limits
      * - Limited loan products
      */
-    D(580, 669, "较差", "§c★★☆☆☆", 0.095, 50000.0),
+    D(450, 549, "较差", "§c★★☆☆☆", 0.095, 50000.0),
     
     /**
-     * Poor credit (300-579)
+     * Poor credit (300-449)
      * - Highest interest rates
      * - Very low credit limits
      * - Minimal loan products
      */
-    F(300, 579, "很差", "§4★☆☆☆☆", 0.150, 10000.0);
+    F(300, 449, "很差", "§4★☆☆☆☆", 0.150, 10000.0);
     
     private final int minScore;
     private final int maxScore;

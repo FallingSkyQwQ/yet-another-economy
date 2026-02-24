@@ -68,6 +68,315 @@ bank:
     savings: "&e储蓄账户"
     fixed_deposit: "&9定期账户"
     loan: "&c贷款账户"
+
+# 贷款系统
+loan:
+  # 通用贷款消息
+  general:
+    title: "&6=== 贷款系统 ==="
+    service_unavailable: "{icons.error} 贷款服务暂不可用"
+    insufficient_privilege: "{icons.error} 权限不足，无法操作贷款系统"
+    
+  # 信用评分相关
+  credit:
+    title: "&b=== 信用评分 ==="
+    checking_score: "{icons.info} 正在检查信用评分..."
+    score_display: "&f信用评分: &e{score}/850 &8| &f等级: &b{grade}"
+    grade_explanation: "&7{grade}: {description}"
+    not_qualify: "{icons.warning} 评分不足，建议改善信用"  
+    score_updated: "{icons.success} 信用评分已更新"
+    score_refresh_failed: "{icons.error} 更新评分失败: {reason}"
+    
+    grade_a: "&a优秀 (800+)"
+    grade_b: "&b良好 (740-799)"  
+    grade_c: "&e一般 (670-739)"
+    grade_d: "&6偏差 (580-669)"
+    grade_f: "&c较差 (<580)"
+    
+    grade_a_desc: "信用优秀，可享低利率贷款"
+    grade_b_desc: "信用良好，符合大多数贷款要求"
+    grade_c_desc: "信用一般，需改善以获得更好利率"
+    grade_d_desc: "信用偏差，申请需严格审核"
+    grade_f_desc: "信用较差，需大幅改善"
+
+  # 贷款申请
+  application:
+    gui_opened: "{icons.success} 已打开贷款申请界面"
+    checking_eligibility: "{icons.progress} 正在检查申请资格..."
+    
+    eligibility_check:
+      checking: "{icons.info} 资格检查中，请稍候..."
+      success: "{icons.success} 资格检查完成"
+      qualified: "{icons.success} 符合申请条件"
+      not_qualified: "{icons.error} 不符合申请条件: {reason}"
+      session_error: "{icons.error} 会话超时，请重新申请"
+      invalid_type: "{icons.error} 请先选择贷款类型"
+    
+    step1:
+      title: "第1步: 资格条件检查"
+      description: "验证资格状态"
+      
+    step2:
+      title: "第2步: 金额和期限选择"
+      description: "制定贷款方案"
+      
+    step3:
+      title: "第3步: 贷款类型选择"
+      description: "确定贷款类型"
+      
+    step4:
+      title: "第4步: 抵押物评估"
+      description: "评估抵押价值"
+      
+    step5:
+      title: "第5步: 最终确认"
+      description: "确认所有信息"
+      
+    amount:
+      title: "&6贷款金额选择"
+      current_selection: "&f当前选择: &e¥{amount}"
+      validation: "&f验证中..."
+      invalid_amount: "{icons.error} 无效金额: {amount}"
+      amount_out_of_range: "{icons.error} 金额超出范围 (¥500 - ¥1,000,000)"
+      enter_custom_amount: "{icons.info} 请输入自定义金额 (数字)"
+      
+    term:
+      title: "&b贷款期限选择"
+      current_selection: "&f当前选择: &b{term}个月"
+      estimated_monthly: "&f预估月供: &a¥{payment}"
+      validation: "&f验证中..."
+      invalid_term: "{icons.error} 期限无效: {term}个月"
+      
+    loan_type:
+      title: "&5贷款类型选择"
+      credit_type: "&a信用贷款 - 基于信用评分"
+      mortgage_type: "&e抵押贷款 - 需要抵押物"
+      business_type: "&b商业贷款 - 用于商业发展"
+      emergency_type: "&c应急贷款 - 快速小额"
+      requirements:
+        credit: "• 信用评分600+\n• 身份证明\n• 收入证明"
+        mortgage: "• 信用评分650+\n• 抵押物评估\n• 房产证明"  
+        business: "• 信用评分700+\n• 营业执照\n• 财务报表"
+        emergency: "• 信用评分500+\n• 紧急情况证明"
+      advantages:
+        credit: "• 审批快速\n• 无需抵押\n• 用途灵活"
+        mortgage: "• 利率较低\n• 额度较高\n• 期限长久" 
+        business: "• 支持发展\n• 专业服务\n• 额度适中"
+        emergency: "• 快速放款\n• 要求宽松\n• 即时到账"
+      
+    collateral:
+      title: "&6抵押物评估"
+      not_required: "{icons.info} 所选贷款类型无需抵押"
+      assessing: "{icons.progress} 抵押物评估中..."
+      assessment_failed: "{icons.error} 评估失败: {reason}"
+      assessment_complete: "{icons.success} 评估完成"
+      total_value: "&f评估价值: &e¥{value}"
+      discounted_value: "&f折扣后价值: &a¥{discounted}" 
+      discount_rate: "&f折扣率: &c{rate}%"
+      instructions: "&7放置要作抵押的物品到输入槽"
+      
+    confirmation:
+      title: "<item:EMERALD_BLOCK>&a最终确认"
+      checking: "&f检查所有信息..."
+      submit_button: "&a✅ 提交申请并同意条款"
+      cancel_button: "&c❌ 取消/返回修改"
+      terms_title: "&3贷款条款和条件"
+      privacy_title: "&9隐私政策"
+      
+    submission:
+      title: "&6申请提交"
+      submitting: "{icons.progress} 正在提交申请..."
+      success: "{icons.success} 申请提交成功! 申请ID: {app_id}"
+      success_auto_approved: "{icons.success} 申请已自动批准! 请等待放款"
+      success_pending_review: "{icons.success} 申请已提交，等待人工审核"
+      failed: "{icons.error} 申请提交失败: {reason}"
+      submission_failed: "{icons.error} 提交失败，请稍后重试"
+      incomplete: "{icons.error} 申请信息不完整，请补充"
+      session_timeout: "{icons.error} 会话超时，请重新申请"
+      application_id: "&f申请编号: &e{id}"
+      application_status: "&f申请状态: &b{status}"
+      
+    purpose:
+      enter_purpose: "{icons.info} 请简述贷款用途"
+      
+    cancelled: "{icons.info} 申请已取消"
+    
+  # 贷款管理
+  management:
+    title: "&6贷款管理"
+    no_permission: "{icons.error} 您没有贷款管理权限 (yae.loan.manage)"
+    service_unavailable: "{icons.error} 贷款管理服务暂不可用"
+    gui_opened: "{icons.success} 已打开贷款管理界面"
+    
+    statistics:
+      title: "&b贷款业务概览"
+      pending_applications: "&f待审批申请: &e{count}"
+      active_loans: "&f活跃贷款数: &b{count}"
+      overdue_loans: "&f逾期贷款数: &c{count}"
+      exceptional_cases: "&f异常处理数: &6{count}"
+      refresh: "&f点击刷新统计数据"
+      
+    menu:
+      pending_reviews: "&e待审批申请"
+      loan_monitoring: "&b贷款监控"
+      overdue_collection: "&c逾期催收"
+      statistics_reports: "&6统计报告"
+      system_settings: "&d系统设置"
+      
+    actions:
+      approve: "&a批准"
+      reject: "&c驳回"
+      pending_review: "&6待审<div>"
+      process: "&b处理"
+      begin_collection: "&c开始催收"
+      waive_penalty: "&e豁免罚息"
+      suspend_account: "&6暂停账户"
+      blacklist: "&4列入黑名单"
+      
+  # 我的贷款
+  myloans:
+    title: "&b我的贷款"
+    gui_opened: "{icons.success} 已打开我的贷款界面"
+    no_active_loans: "{icons.info} 您目前没有活跃贷款"
+    cannot_apply_now: "{icons.warning} 当前无法申请新贷款"
+    execute_quick_pay: "{icons.info} 执行快捷还款命令..."
+    
+    summary:
+      title: "&b个人贷款概览"
+      borrow">ID: {id}"
+      monthly_payment: "&f月度还款额: &a¥{amount}"
+      credit_score_display: "&f信用评分: &650"
+      credit_grade: "&f信用等级: &b一般"
+      refresh: "&e点击刷新个人数据"
+      
+    sections:
+      active_loans: "&e活跃贷款列表"
+      repayment_schedule: "&6还款计划"
+      payment_history: "&f还款记录"
+      calculate_loan: "&b贷款计算器"
+      apply_new_loan: "&2申请新贷款"
+      reminder_settings: "&6提醒设置"
+      
+    quick_actions:
+      title: "&a快捷操作"
+      one_click_pay: "&b1次点击还款: /yae loan pay -a"
+      
+    settings:
+      title: "&d偏好设置"
+      notification: "&7还款提醒设置"
+      auto_pay: "&7自动扣账方式"
+      privacy: "&7数据偏好选择"
+      
+  # 还款系统
+  repayment:
+    title: "&3还款系统"
+    processing: "{icons.progress} 正在处理还款..."
+    success: "{icons.success} 还款成功! 金额: {icons.money}¥{amount}"
+    failed: "{icons.error} 还款失败: {reason}"
+    insufficient_funds: "{icons.error} 资金不足，无法完成还款"
+    
+    methods:
+      bank_transfer: "银行转账"
+      wallet: "钱包余额" 
+      system_credit: "系统信用"
+      
+    status:
+      completed: "{icons.success} 已完成"
+      pending: "{icons.info} 待处理"
+      processing: "{icons.progress} 处理中"
+      failed: "{icons.error} 失败"
+      cancelled: "{icons.error} 已取消"
+      
+    schedule:
+      title: "&6还款计划"
+      current_payment: "&f当前期次: &a{month}/ {total}"
+      next_payment_date: "&f下次还款日: &b{date}"
+      monthly_amount: "&f月度还款额: &e¥{amount}"
+      remaining_principal: "&f剩余本金: &b¥{amount}"
+      total_interest: "&f总利息: &c¥{amount}"
+      early_payoff_options: "&6提前还款选项"
+      
+    autopay:
+      title: "&b自动还款"
+      status: "&f状态: {status}"
+      method: "&f方式: {method}"
+      set_auto_pay: "&a启用自动扣账"
+      disable_auto_pay: "&c禁用自动扣账"
+      next_attempt: "&f下次尝试: {time}"
+      retry_count: "&f重试次数: {count}"
+      
+  # 逾期处理
+  overdue:
+    title: "&c逾期处理"
+    penalty_calculation: "{icons.info} 罚息计算中..."
+    penalty_applied: "{icons.warning} 已应用罚息: ¥{amount}"
+    collection_initiated: "{icons.info} 催收流程已启动"
+    account_suspended: "{icons.warning} 账户已暂停"
+    blacklisted: "{icons.error} 已列入黑名单"
+    
+    penalty:
+      title: "&c罚息计算"
+      base_amount: "&f逾期金额: &e¥{amount}"
+      overdue_days: "&f逾期天数: &b{days}"
+      penalty_rate: "&f罚息利率: &c{rate}%/天"
+      total_penalty: "&f累计罚息: &c¥{amount}"
+      
+    collection:
+      methods:
+        email: "邮件通知"
+        sms: "短信提醒"
+        phone: "电话催收"
+        in_app: "应用内通知"
+        account_restriction: "账户限制"
+      
+    legal:
+      escalation_warning: "{icons.warning} 即将升级法律程序"
+      legal_action: "{icons.error} 已转入法律处理"
+      
+  # 系统状态
+  system:
+    status:
+      enabled: "{icons.success} 系统已启用"
+      disabled: "{icons.error} 系统已禁用"
+      initializing: "{icons.progress} 系统初始化中..."
+      running: "{icons.success} 系统运行中"
+      stopping: "{icons.warning} 系统停止中..."
+      reloading: "{icons.progress} 系统重载中..."
+      failed: "{icons.error} 系统启动失败"
+      healthy: "{icons.success} 系统健康"
+      unhealthy: "{icons.warning} 系统异常"
+      
+# 帮助信息
+help:
+  loan_help:
+    title: "&6=== 贷款命令帮助 ==="
+    loan: "&a/yae loan &f- 打开贷款主界面"
+    loan_apply: "&a/yae loan apply <类型> <金额> <月数> [用途] &f- 申请贷款"
+    loan_pay: "&a/yae loan pay <贷款ID> [金额] &f- 还款操作"
+    loan_list: "&a/yae loan list &f- 查看我的贷款"
+    loan_status: "&a/yae loan status [贷款ID] &f- 查看贷款状态"
+    loan_gui: "&a/yae loan gui &f- 打开图形界面"
+    loan_eligibility: "&a/yae loan eligibility [类型] &f- 检查申请资格"
+    loan_calculator: "&a/yae loan calculate <金额> <月数> [年利率] &f- 贷款计算器"
+    loan_auto_pay: "&a/yae loan auto_pay <贷款ID> [启用/禁用] &f- 设置自动还款"
+    
+  credit_help:
+    title: "&b=== 信用评分命令帮助 ==="
+    credit_score: "&a/yae credit score &f- 查看信用评分"
+    credit_grade: "&a/yae credit grade &f- 查看信用等级详情"
+    credit_refresh: "&a/yae credit refresh &f- 重新计算信用评分"
+    credit_report: "&a/yae credit report &f- 生成信用报告"
+    credit_eligibility: "&a/yae credit eligibility <类型> &f- 检查贷款资格"
+    
+  admin_help:
+    title: "&c=== 管理命令帮助 ==="
+    loan_admin_approve: "&c/yae loan admin approve <贷款ID> [理由] &f- 批准贷款"
+    loan_admin_reject: "&c/yae loan admin reject <贷款ID> [理由] &f- 拒绝贷款"
+    loan_admin_process: "&c/yae loan admin process <贷款ID> &f- 处理放款"
+    loan_admin_stats: "&c/yae loan admin stats &f- 查看统计报告"
+    loan_admin_penalty_waiver: "&c/yae loan admin waiver <贷款ID> <金额> [理由] &f- 豁免罚息"
+    loan_admin_suspend: "&c/yae loan admin suspend <玩家> [理由] &f- 暂停账户"
+    loan_admin_blacklist: "&c/yae loan admin blacklist <玩家> [理由] &f- 列入黑名单"
   
   # 操作反馈
   messages:
@@ -276,6 +585,252 @@ commands:
   interest_types: "&f利息类型: current(活期), fixed(定期), compound(复利)"
   
 # 系统状态
+# 商店系统
+shop:
+  # 商店信息
+  info:
+    title: "&6[YAE 商店]"
+    categories_title: "&e=== 商品分类 ==="
+    items_title: "&e=== 商品列表 ==="
+    category_format: "&f[{icons.shop}] {category}:"
+    item_format: "&7- {item_name} &a{price} &f| &7库存: {stock}"
+    no_items: "{icons.warning} 该分类暂无可售商品"
+    shop_disabled: "{icons.error} 商店系统已关闭"
+  
+  # 商品详情
+  item_detail:
+    title_prefix: "&6商品详情"
+    item_info: "&f📖 商品信息"
+    category_info: "&b📁 商品分类"
+    status_available: "&a✅ 商品可用"
+    status_unavailable: "&c❌ 商品不可用"
+    basic_info: "&f📋 基本信息"
+    description: "&9📝 商品描述"
+    market_info: "&e📊 市场信息"
+    usage_guide: "&5🔧 使用指南"
+    tips: "&6💡 购买建议"
+    
+  # 价格信息
+  price_info:
+    buy_price: "&6💰 购买价格"
+    sell_price: "&c🔄 出售价格"
+    price_comparison: "&e📈 价格对比"
+    profit_analysis: "&2💎 利润分析"
+    market_price: "&9🌍 市场价格"
+    tax_info: "&b税费: &c{tax_rate}%"
+    final_price: "&6含税价格: &6{final_price}"
+    profit_margin: "&7利润率: &e{profit_margin}%"
+    profitability: "&7盈利评级: {rating}"
+    low_risk: "&c高风险"
+    medium_risk: "&e中度风险"
+    reasonable_profit: "&a合理利润"
+    high_profit: "&6高利润"
+    
+  # 库存信息
+  stock_info:
+    stock_available: "&a📦 库存信息"
+    stock_unavailable: "&c📦 库存信息"
+    out_of_stock: "&c⚠️ 暂无库存"
+    low_stock: "&c⚠️ 库存紧张"
+    unlimited_stock: "&a♾️ 无限制库存"
+    current_stock: "&7&l当前库存: &e{stock} 个"
+    stock_status: "&7&l库存状态: {status}"
+    real_time_update: "&7库存实时更新"
+    
+  # 限购信息
+  limit_info:
+    daily_limit_title: "&e📅 每日限购"
+    daily_limit_reached: "&c🚫 每日限购已满"
+    unlimited_daily: "&b♾️ 每日限购"
+    remaining_daily: "&7&l剩余可购买: &6{remaining} 个"
+    daily_purchases: "&7&l已购买/限制: &e{purchased}/{limit}"
+    daily_reset: "&7&l重置时间: &b{daily_reset}"
+    player_limit_title: "&e📅 个人限购"
+    unlimited_player: "&b♾️ 个人限购"
+    remaining_player: "&7&l剩余可购买: &6{remaining} 个"
+    player_purchases: "&7&l总购买/限制: &e{purchased}/{limit}"
+    permanent_limit: "&7&l限制类型: &c永久"
+    
+  # 购买可行性
+  availability:
+    title_available: "&a✅ 购买可行性"
+    title_unavailable: "&c❌ 购买可行性"
+    title_insufficient_funds: "&6⚠️ 购买可行性"
+    can_purchase: "&7&l可购买: &a是"
+    cannot_purchase: "&7&l可购买: &c否"
+    insufficient_funds: "&7&l可购买: &6资金不足"
+    stock_sufficient: "&7&l库存: &a充足"
+    stock_insufficient: "&7&l库存: &c不足"
+    funds_sufficient: "&7&l资金: &a充足"
+    funds_insufficient: "&7&l资金: &c不足"
+    daily_available: "&7&l每日限购: &a可购买"
+    daily_limit_reached: "&7&l每日限购: &c已达限"
+    player_available: "&7&l个人限购: &a可购买"
+    player_limit_reached: "&7&l个人限购: &c已达限"
+    
+  # 操作按钮
+  actions:
+    buy_now: "&a✅ 立即购买"
+    cannot_buy: "&c❌ 暂时无法购买"
+    quick_buy: "&6⚡ 快速购买"
+    add_favorite: "&e⭐ 添加到收藏"
+    favorite_added: "{icons.success} 商品已添加到收藏"
+    
+  # 购买确认界面
+  purchase_confirm:
+    title_prefix: "&6商店购买确认 - {item_name}"
+    success_badge: "&a✅ 购买可行"
+    failure_badge: "&c❌ {reason}"
+    item_info: "&f📖 商品信息"
+    stock_info: "&a📦 库存信息"
+    success_icon: "&a✅ 交易成功"
+    failure_icon: "&c❌ 交易失败"
+    unit_price: "&6💰 单价信息"
+    total_price: "&a💎 总价格"
+    tax_info: "&b🏛️ 税费信息"
+    final_price: "&6💎 最终价格"
+    price_comparison: "&e📊 价格对比"
+    current_quantity: "&e📋 当前数量"
+    manual_input: "&e🔧 手动输入"
+    confirm_purchase: "&a✅ 确认购买"
+    cancel_purchase: "&c❌ 取消购买"
+    continue_shopping: "&b🛍️ 继续购物"
+    question_mark: "&7❓ "
+    
+  # 数量选择器
+  quantity_selector:
+    decrease_64: "&c&l-64"
+    decrease_10: "&c&l-10"
+    decrease_1: "&c&l-1"
+    increase_1: "&a&l+1"
+    increase_10: "&a&l+10"
+    increase_64: "&a&l+64"
+    quantity_display: "&7&l选择数量: &6{quantity}"
+    adjust_quantity: "&7点击选择按钮调整数量"
+    manual_input_prompt: "&7或者点击手动输入按钮"
+    decrease_tooltip: "&7点击减少 {amount} 个"
+    increase_tooltip: "&7点击增加 {amount} 个"
+    
+  # 撤销功能
+  revoke:
+    revoke_button: "&6⏰ {remaining_time}秒撤销"
+    revoke_tooltip: "&7点击撤销此次购买"
+    revoke_info: "&7撤销后返还全部金额"
+    time_remaining: "&a剩余时间: &e{time} 秒"
+    time_short: "&c⚠️ 快点决定: &4{time} 秒"
+    revoke_timeout: "撤销期限已过，无法撤销购买"
+    purchase_revoked: "{icons.success} 购买已成功撤销"
+    amount_refunded: "{icons.info} 已返还金额: {refund_amount}"
+    confirmation_timeout: "购买确认超时，自动取消购买"
+    
+  # 购买状态
+  purchase_status:
+    purchase_cancelled: "购买已取消"
+    purchase_intent: "即将返回商店界面..."
+    purchase_failed: "购买失败: {reason}"
+    insufficient_funds: "资金不足，无法购买此商品"
+    purchase_pending: "创建购买记录失败"
+    purchase_processing: "购买处理时出错"
+    purchase_error_admin: "购买处理失败，请联系管理员"
+    
+  # 回凭系统
+  receipt:
+    title_prefix: "&6购买回执 - {order_id}"
+    success_badge: "&a✅ 交易成功"
+    order_status: "&6📋 订单状态"
+    transaction_success: "恭喜您成功购买商品"
+    transaction_time: "&7&l交易时间: &b{purchase_time}"
+    order_id: "&7&l订单号: &e{order_id}"
+    transaction_amount: "&6💰 交易金额"
+    transaction_type: "&3🔥 交易类型"
+    tax_details: "&b🏛️ 税费详情"
+    customer_service: "&9💬 客户服务"
+    item_details: "&f📖 商品详情"
+    usage_guide: "&9💡 使用指南"
+    balance_change: "&6💰 余额变化"
+    transaction_summary: "&a📊 交易摘要"
+    financial_advice: "&d💎 财务建议"
+    continue_shopping: "&b🛍️ 继续购物"
+    view_receipt: "&f📖 查看详细回凭"
+    view_order: "&7订单已保存，您可以使用命令重新显示"
+    receipt_saved: "{icons.success} 回凭订单号: {order_id}"
+    close_receipt: "&c❌ 关闭回凭"
+    
+    # 交易详情
+    transaction_details:
+      timestamp_format: "&7&l购买时间: &b{time}"
+      order_id_format: "&7&l订单ID: &d{order_id}"
+      item_quantity: "&7&l购买数量: &e{quantity} 个"
+      pay_item_price: "&7&l商品总价: &e{total_price}"
+      pay_tax_amount: "&7&l税费金额: &c{tax_amount}"
+      pay_final_amount: "&7&l最终支付: &6{final_price}"
+      pay_item_name: "&7&l购买商品: &6{item_name}"
+      unit_price: "&7&l购买单价: &6{unit_price}"
+      tax_rate: "&7&l税率: &c{tax_rate}%"
+      customer_help: "&7如有问题，请联系管理员"
+      provide_order_id: "&7提供订单号: &e{order_id}"
+      save_receipt: "&7保存此回执以备查询"
+      
+    # 客户支持
+    customer_support:
+      help_needed: "&7如有问题，请联系管理员"
+      contact_admin: "&7提供订单号获得帮助"
+      receipt_validity: "&7回据有效期: {validity}"
+      digital_storage: "&7&l保存方式为: &a数字化存储"
+      
+    # 财务数据
+    financial_data:
+      merchant_balance_before: "&7&l交易前余额: &a{balance_before}"
+      merchant_balance_after: "&7&l交易后余额: &6{balance_after}"
+      merchant_amount_spent: "&7&l消费金额: &c-{amount_spent}"
+      merchant_account_status: "&7&l账户状态: &a正常"
+      account_balance: "&7账户余额: {balance}"
+      
+    # 财务建议
+    financial_advice:
+      large_purchase_notice: "&6💰 大量消费提示:"
+      large_purchase_advice: "&6• 考虑增加收入来源"
+      purchase_success: "&a✅ 明智的消费选择"
+      rational_consumption: "&7• 保持良好的消费习惯"
+      check_cash_flow: "&7• 记得查看现金流"
+      next_shopping: "&7• 关注商品优惠"
+      price_comparison: "&7• 比较价格和功能"
+      buy_appropriately: "&7• 量力而行，理性消费"
+      
+  # 回据状态
+  receipt_status:
+    valid: "效的回据"
+    not_found: "未找到回据"
+    expired: "回据已过期"
+    revoked: "回据已被撤销"
+    error: "验证时发生错误"
+    
+  # 系统消息
+  system:
+    service_unavailable: "商店服务暂不可用"
+    class_title_prefix: "&6商品信息"
+    receipt_validity: "&7回据有效期: {validity}"
+    item_granted: "{icons.success} 商品已发放到您的库存中"
+    inventory_full: "{icons.warning} 您的库存已满，部分商品已放置在地面上"
+    order_show_help: "{icons.info} 订单已保存，您可以使用 /yae receipt view {order_id} 命令重新显示此回凭"
+    purchase_quick_help: "{icons.info} 使用 /yae shop buy <数量> 来购买此商品"
+    return_shop_interface: "{icons.info} 返回商店界面使用 /yae shop"
+    item_uses:
+      pickaxe: "&7• 用于挖掘矿石&7• 挖掘石头和矿物&7• 镐的等级决定挖掘能力"
+      sword: "&7• 用于战斗和防御&7• 可攻击敌对生物&7• 剑的等级影响伤害"
+      food: "&7• 右击食用&7• 回复饥饿值&7• 不同的食物回复不同"
+      tool: "&7• 用于工具和材料制作&7• 制作高级装备所需"
+      default: "&7• 用于建造和装饰&7• 放置在世界中&7• 可能有特殊功能"
+      
+    failure_reasons:
+      item_unavailable: "该商品当前不可用"
+      insufficient_funds: "资金不足，无法购买此商品"
+      stock_insufficient: "当前库存不足"
+      daily_limit_reached: "每日限购已满"
+      player_limit_reached: "个人限购已满"
+      calculation_failed: "购买计算失败"
+      purchase_failed: "购买失败"
+      
 system:
   status:
     enabled: "{icons.success} 系统已启用"

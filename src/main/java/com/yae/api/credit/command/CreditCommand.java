@@ -5,6 +5,7 @@ import com.yae.api.core.YAECore;
 import com.yae.api.core.command.YAECommand;
 import com.yae.api.credit.CreditGrade;
 import com.yae.api.credit.CreditService;
+import com.yae.api.credit.CreditReportGenerator;
 import com.yae.utils.MessageUtils;
 import com.yae.utils.Logging;
 import java.util.logging.Level;
@@ -13,6 +14,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import java.time.format.DateTimeFormatter;
 
 import java.util.*;
 
@@ -23,6 +25,7 @@ import java.util.*;
 public class CreditCommand extends YAECommand {
     
     private final CreditService creditService;
+    private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy年MM月dd日 HH:mm");
     
     public CreditCommand(@NotNull YAECore plugin, @NotNull CreditService creditService) {
         super(plugin, "credit", "信用评分相关命令", "yae.command.credit", 
@@ -210,62 +213,42 @@ public class CreditCommand extends YAECommand {
         sender.sendMessage(MessageUtils.info("正在查询 " + playerName + " 的信用评分..."));
         
         try {
-            int score = creditService.getCreditScore(target.getUniqueId());
-            CreditGrade grade = creditService.getCreditGrade(target.getUniqueId());
-            double rank = calculateCreditRank(target.getUniqueId());
+            // Get the enhanced credit report
+            CreditService.CreditReport report = creditService.getCreditReport(target.getUniqueId());
             
             if (sender.equals(target)) {
-                // Show to the player themselves
-                sender.sendMessage(MessageUtils.success("信用评分查询结果:"));
-                sender.sendMessage(MessageUtils.color(""));
-                sender.sendMessage(MessageUtils.color("&6━━━━━━━━━━ 您的信用信息 ━━━━━━━━━━"));
-                sender.sendMessage(MessageUtils.color("&7信用评分: &f" + score));
-                sender.sendMessage(MessageUtils.color("&7信用等级: " + grade.getDisplayName()));
-                sender.sendMessage(MessageUtils.color("&7等级描述: &f" + grade.getChineseName()));
-                sender.sendMessage(MessageUtils.color("&7分数范围: &f" + grade.getMinScore() + " - " + grade.getMaxScore()));
-                sender.sendMessage(MessageUtils.color("&7最高信用额度: &6💰" + String.format("%,.0f", grade.getMaxCreditLimit())));
-                sender.sendMessage(MessageUtils.color("&7基础年利率: &f" + String.format("%.2f%%", grade.getBaseInterestRate() * 100)));
-                
-                if (rank > 0) {
-                    sender.sendMessage(MessageUtils.color("&7信用排名: &f" + String.format("%.1f%% (前%s)", rank, (100.0 - rank)) + "%"));
-                }
-                
-                // Qualification summary
-                sender.sendMessage(MessageUtils.color(""));
-                sender.sendMessage(MessageUtils.color("&6━━━━━━━━ 贷款申请资格 ━━━━━━━━"));
-                showQualificationSummary(sender, score, grade);
-                sender.sendMessage(MessageUtils.color("&6━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"));
-                
+                // Show detailed credit report to the player themselves
+                String creditReport = CreditReportGenerator.generateCreditReport(report);
+                sender.sendMessage(MessageUtils.color(creditReport));
             } else {
-                // Show to another user (admin view)
+                // Show summary to admin/other player
                 sender.sendMessage(MessageUtils.success("信用评分查询结果 - " + playerName + ":"));
+                
+                CreditGrade grade = report.getGrade();
+                
                 sender.sendMessage(MessageUtils.color("&7玩家: &f" + playerName));
-                sender.sendMessage(MessageUtils.color("&7信用评分: &f" + score));
+                sender.sendMessage(MessageUtils.color("&7信用评分: &f" + report.getScore()));
                 sender.sendMessage(MessageUtils.color("&7信用等级: " + grade.getDisplayName()));
                 sender.sendMessage(MessageUtils.color("&7等级描述: &f" + grade.getChineseName()));
                 sender.sendMessage(MessageUtils.color("&7分数范围: &f" + grade.getMinScore() + " - " + grade.getMaxScore()));
                 sender.sendMessage(MessageUtils.color("&7最高信用额度: &6💰" + String.format("%,.0f", grade.getMaxCreditLimit())));
                 sender.sendMessage(MessageUtils.color("&7基础年利率: &f" + String.format("%.2f%%", grade.getBaseInterestRate() * 100)));
-                sender.sendMessage(MessageUtils.color("&7最高可获贷款: &6💰" + String.format("%,.0f", grade.getMaxCreditLimit())));
-                
-                if (rank > 0) {
-                    sender.sendMessage(MessageUtils.color("&7信用排名: " + String.format("%.1f%% (前%s)", rank, (100.0 - rank)) + "%"));
-                }
                 
                 if (sender.hasPermission("yae.admin.credit.detailed")) {
                     sender.sendMessage(MessageUtils.color(""));
                     sender.sendMessage(MessageUtils.color("&e管理员信息:"));
                     sender.sendMessage(MessageUtils.color("&7• UUID: &f" + target.getUniqueId()));
-                    sender.sendMessage(MessageUtils.color("&7• 最新更新时间: &f" + "待实现")); // TODO: Add last update time
+                    sender.sendMessage(MessageUtils.color("&7• 评分时间: &f" + report.getScoreData().getCalculatedAt().format(DATE_FORMATTER)));
                 }
                 
                 sender.sendMessage(MessageUtils.color(""));
                 sender.sendMessage(MessageUtils.color("&7贷款资格摘要:"));
-                showQualificationSummary(sender, score, grade);
+                showQualificationSummary(sender, report.getScore(), grade);
             }
             
         } catch (Exception ex) {
-            sender.sendMessage(MessageUtils.error("获取信用评分失败，可能未完成初始计算"));
+            Logging.error("Failed to get credit report for player " + target.getUniqueId(), ex);
+            sender.sendMessage(MessageUtils.error("获取信用评分失败: " + ex.getMessage()));
         }
         
         return true;

@@ -25,6 +25,7 @@ import java.util.logging.Logger;
 /**
  * Shop management service that handles item configuration, inventory, and purchase limits.
  */
+@SuppressWarnings("unchecked")
 public class ShopManager implements Service {
     
     private final YAECore plugin;
